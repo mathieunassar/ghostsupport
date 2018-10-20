@@ -1,3 +1,5 @@
+set(GHOST_SUPPORT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE FILEPATH "Root directory of ghost_support")
+
 # MODULE LIBRARY
 
 #####################################################################
