@@ -4,6 +4,11 @@ set(GHOST_SUPPORT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE FILEPATH "Root dire
 
 #####################################################################
 
+set(GHOST_SUPPORT_INCLUDE_DIRECTORIES
+	${GHOST_SUPPORT_ROOT_DIR}/include
+	CACHE FILEPATH "Include directories of ghost_support"
+)
+	
 file(GLOB header_internal_commons_lib
 ./include/BlockingQueue.hpp
 ./include/BlockingQueue.impl.hpp
