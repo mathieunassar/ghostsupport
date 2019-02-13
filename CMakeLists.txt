@@ -2,6 +2,10 @@ set(GHOST_SUPPORT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE FILEPATH "Root dire
 
 # MODULE LIBRARY
 
+include_directories(
+	${GHOST_SUPPORT_ROOT_DIR}/include
+)
+
 #####################################################################
 
 set(GHOST_SUPPORT_INCLUDE_DIRECTORIES
