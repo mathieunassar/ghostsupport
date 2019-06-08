@@ -27,4 +27,5 @@ file(GLOB header_internal_commons_lib
 
 add_library(ghostcommons ${header_internal_commons_lib})
 
-set_property(TARGET ghostcommons PROPERTY FOLDER "ghost_support")
+set_target_properties(ghostcommons PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(ghostcommons PROPERTY FOLDER "ghost_support")
