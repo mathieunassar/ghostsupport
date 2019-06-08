@@ -1,10 +1,11 @@
+cmake_minimum_required(VERSION 3.8)
+
+set(projectName ghost_support)
 set(GHOST_SUPPORT_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE FILEPATH "Root directory of ghost_support")
 
-# MODULE LIBRARY
-
-include_directories(
-	${GHOST_SUPPORT_ROOT_DIR}/include
-)
+# define the project
+project(${projectName} CXX)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 #####################################################################
 
@@ -12,19 +13,18 @@ set(GHOST_SUPPORT_INCLUDE_DIRECTORIES
 	${GHOST_SUPPORT_ROOT_DIR}/include
 	CACHE FILEPATH "Include directories of ghost_support"
 )
-	
+
+include_directories(
+	${GHOST_SUPPORT_INCLUDE_DIRECTORIES}
+)
+
 file(GLOB header_internal_commons_lib
 ./include/BlockingQueue.hpp
 ./include/BlockingQueue.impl.hpp
 )
 
-file(GLOB sources_internal_commons_lib
-./src/main.cpp
-)
-
 #####################################################################
 
-add_library(Commons ${header_internal_commons_lib}
-	${sources_internal_commons_lib})
+add_library(ghostcommons ${header_internal_commons_lib})
 
-set_property(TARGET Commons PROPERTY FOLDER "Internal")
+set_property(TARGET ghostcommons PROPERTY FOLDER "ghost_support")
