@@ -25,7 +25,13 @@ file(GLOB header_internal_commons_lib
 
 #####################################################################
 
-add_library(ghostcommons ${header_internal_commons_lib})
+if (${APPLE})
+	add_library(ghostcommons INTERFACE)
+	target_sources(ghostcommons INTERFACE ${header_internal_commons_lib})
+	target_include_directories(ghostcommons INTERFACE include/)
+else()
+	add_library(ghostcommons ${header_internal_commons_lib})
 
-set_target_properties(ghostcommons PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(ghostcommons PROPERTIES FOLDER "ghost_support")
+	set_target_properties(ghostcommons PROPERTIES LINKER_LANGUAGE CXX)
+	set_target_properties(ghostcommons PROPERTIES FOLDER "ghost_support")
+endif()
