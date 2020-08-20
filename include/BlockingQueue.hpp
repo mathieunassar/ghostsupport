@@ -45,6 +45,10 @@ namespace ghost
 			const T& get() const;
 			/// fetches the next element of the queue, if one is available within the given time. Returns true if an element was available.
 			bool tryGet(std::chrono::milliseconds timeout, T& result);
+			/// Performs a get, and a pop.
+			T getAndPop() const;
+			/// Performs a tryGet, and a pop.
+			bool tryGetAndPop(std::chrono::milliseconds timeout, T& result) const
 			/// adds a value to the queue.
 			void push(const T& value);
 			/// removes the next element of the queue. If the queue is empty, does not do anything.
