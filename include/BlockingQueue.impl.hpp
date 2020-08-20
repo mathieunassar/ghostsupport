@@ -40,7 +40,7 @@ bool BlockingQueue<T>::tryGet(std::chrono::milliseconds timeout, T& result)
 }
 
 template <typename T>
-T BlockingQueue<T>::getAndPop() const
+T BlockingQueue<T>::getAndPop()
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	_condition.wait(lock, [=] { return !_queue.empty(); });
@@ -51,7 +51,7 @@ T BlockingQueue<T>::getAndPop() const
 }
 
 template <typename T>
-bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result) const
+bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	if (_queue.size() == 0)
