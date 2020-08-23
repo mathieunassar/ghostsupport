@@ -24,15 +24,9 @@ const T& BlockingQueue<T>::get() const
 	return _queue.back();
 }
 
-/// fetches the next element of the queue, if one is available within the given time. Returns true if an element was available.
 template <typename T>
-bool BlockingQueue<T>::tryGet(std::chrono::milliseconds timeout, T& result)
-{
-	return tryGet(std::chrono::duration_cast<std::chrono::nanoseconds>(timeout), result);
-}
-
-template <typename T>
-bool BlockingQueue<T>::tryGet(std::chrono::nanoseconds timeout, T& result)
+template<class Rep, class Period>
+bool BlockingQueue<T>::tryGet(std::chrono::duration<Rep, Period> timeout, T& result)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
 	if (_queue.size() == 0)
@@ -57,7 +51,8 @@ T BlockingQueue<T>::getAndPop()
 }
 
 template <typename T>
-bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result)
+template<class Rep, class Period>
+bool BlockingQueue<T>::tryGetAndPop(std::chrono::duration<Rep, Period> timeout, T& result)
 {
 	return tryGetAndPop(std::chrono::duration_cast<std::chrono::nanoseconds>(timeout), result);
 }
