@@ -44,11 +44,15 @@ namespace ghost
 			/// returns a reference to the next element of the queue, but does not remove it. If the queue is empty, this call is blocking.
 			const T& get() const;
 			/// fetches the next element of the queue, if one is available within the given time. Returns true if an element was available.
+			[[deprecated("Use tryGet(std::chrono::nanoseconds timeout, T& result) instead.")]]
 			bool tryGet(std::chrono::milliseconds timeout, T& result);
+			bool tryGet(std::chrono::nanoseconds timeout, T& result);
 			/// Performs a get, and a pop.
 			T getAndPop();
 			/// Performs a tryGet, and a pop.
+			[[deprecated("Use tryGetAndPop(std::chrono::nanoseconds timeout, T& result) instead.")]]
 			bool tryGetAndPop(std::chrono::milliseconds timeout, T& result);
+			bool tryGetAndPop(std::chrono::nanoseconds timeout, T& result);
 			/// adds a value to the queue.
 			void push(const T& value);
 			/// removes the next element of the queue. If the queue is empty, does not do anything.

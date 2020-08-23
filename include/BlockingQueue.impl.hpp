@@ -28,6 +28,12 @@ const T& BlockingQueue<T>::get() const
 template <typename T>
 bool BlockingQueue<T>::tryGet(std::chrono::milliseconds timeout, T& result)
 {
+	return tryGet(std::chrono::duration_cast<std::chrono::nanoseconds>(timeout), result);
+}
+
+template <typename T>
+bool BlockingQueue<T>::tryGet(std::chrono::nanoseconds timeout, T& result)
+{
 	std::unique_lock<std::mutex> lock(_mutex);
 	if (_queue.size() == 0)
 		_condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
@@ -53,6 +59,12 @@ T BlockingQueue<T>::getAndPop()
 template <typename T>
 bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result)
 {
+	return tryGetAndPop(std::chrono::duration_cast<std::chrono::nanoseconds>(timeout), result);
+}
+
+template <typename T>
+bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result)
+{
 	std::unique_lock<std::mutex> lock(_mutex);
 	if (_queue.size() == 0)
 		_condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
@@ -64,6 +76,7 @@ bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result
 	_queue.pop_back();
 	return true;
 }
+
 
 /// adds a value to the queue.
 template <typename T>
