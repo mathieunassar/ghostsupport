@@ -51,13 +51,6 @@ T BlockingQueue<T>::getAndPop()
 }
 
 template <typename T>
-template<class Rep, class Period>
-bool BlockingQueue<T>::tryGetAndPop(std::chrono::duration<Rep, Period> timeout, T& result)
-{
-	return tryGetAndPop(std::chrono::duration_cast<std::chrono::nanoseconds>(timeout), result);
-}
-
-template <typename T>
 bool BlockingQueue<T>::tryGetAndPop(std::chrono::nanoseconds timeout, T& result)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
