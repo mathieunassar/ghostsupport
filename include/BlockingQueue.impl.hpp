@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
- /// returns a reference to the next element of the queue, but does not remove it. If the queue is empty, this call is blocking.
+/// returns a reference to the next element of the queue, but does not remove it. If the queue is empty, this call is
+/// blocking.
 template <typename T>
 const T& BlockingQueue<T>::get() const
 {
@@ -24,16 +25,13 @@ const T& BlockingQueue<T>::get() const
 	return _queue.back();
 }
 
-/// fetches the next element of the queue, if one is available within the given time. Returns true if an element was available.
 template <typename T>
-bool BlockingQueue<T>::tryGet(std::chrono::milliseconds timeout, T& result)
+bool BlockingQueue<T>::tryGet(std::chrono::steady_clock::duration timeout, T& result)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	if (_queue.size() == 0)
-		_condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
+	if (_queue.size() == 0) _condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
 
-	if (_queue.size() == 0)
-		return false;
+	if (_queue.size() == 0) return false;
 
 	result = _queue.back();
 	return true;
@@ -51,14 +49,12 @@ T BlockingQueue<T>::getAndPop()
 }
 
 template <typename T>
-bool BlockingQueue<T>::tryGetAndPop(std::chrono::milliseconds timeout, T& result)
+bool BlockingQueue<T>::tryGetAndPop(std::chrono::steady_clock::duration timeout, T& result)
 {
 	std::unique_lock<std::mutex> lock(_mutex);
-	if (_queue.size() == 0)
-		_condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
+	if (_queue.size() == 0) _condition.wait_for(lock, timeout, [=] { return !_queue.empty(); });
 
-	if (_queue.size() == 0)
-		return false;
+	if (_queue.size() == 0) return false;
 
 	result = std::move(_queue.back());
 	_queue.pop_back();
