@@ -17,55 +17,55 @@
 #ifndef GHOST_INTERNAL_BLOCKINGQUEUE_HPP
 #define GHOST_INTERNAL_BLOCKINGQUEUE_HPP
 
-#include <mutex>
+#include <chrono>
 #include <condition_variable>
 #include <deque>
-#include <chrono>
 #include <future>
 #include <memory>
+#include <mutex>
 
 namespace ghost
 {
-	namespace internal
-	{
-		template<typename T>
-		class QueueElement
-		{
-		public:
-			T element;
-			std::shared_ptr<std::promise<bool>> result;
-		};
+namespace internal
+{
+template <typename T>
+class QueueElement
+{
+public:
+	T element;
+	std::shared_ptr<std::promise<bool>> result;
+};
 
-		// inspired from https://stackoverflow.com/questions/12805041/c-equivalent-to-javas-blockingqueue
-		template <typename T>
-		class BlockingQueue
-		{
-		public:
-			/// returns a reference to the next element of the queue, but does not remove it. If the queue is empty, this call is blocking.
-			const T& get() const;
-			/// fetches the next element of the queue, if one is available within the given time. Returns true if an element was available.
-			template<class Rep, class Period = std::ratio<1>>
-			bool tryGet(std::chrono::duration<Rep, Period> timeout, T& result);
-			/// Performs a get, and a pop.
-			T getAndPop();
-			/// Performs a tryGet, and a pop.
-			template<class Rep, class Period = std::ratio<1>>
-			bool tryGetAndPop(std::chrono::duration<Rep, Period> timeout, T& result);
-			/// adds a value to the queue.
-			void push(const T& value);
-			/// removes the next element of the queue. If the queue is empty, does not do anything.
-			void pop();
-			/// returns the size of the queue.
-			size_t size() const;
+// inspired from https://stackoverflow.com/questions/12805041/c-equivalent-to-javas-blockingqueue
+template <typename T>
+class BlockingQueue
+{
+public:
+	/// returns a reference to the next element of the queue, but does not remove it. If the queue is empty, this
+	/// call is blocking.
+	const T& get() const;
+	/// fetches the next element of the queue, if one is available within the given time. Returns true if an element
+	/// was available.
+	bool tryGet(std::chrono::steady_clock::duration timeout, T& result);
+	/// Performs a get, and a pop.
+	T getAndPop();
+	/// Performs a tryGet, and a pop.
+	bool tryGetAndPop(std::chrono::steady_clock::duration timeout, T& result);
+	/// adds a value to the queue.
+	void push(const T& value);
+	/// removes the next element of the queue. If the queue is empty, does not do anything.
+	void pop();
+	/// returns the size of the queue.
+	size_t size() const;
 
-		private:
-			mutable std::mutex _mutex;
-			mutable std::condition_variable _condition;
-			std::deque<T> _queue;
-		};
+private:
+	mutable std::mutex _mutex;
+	mutable std::condition_variable _condition;
+	std::deque<T> _queue;
+};
 
-		#include "BlockingQueue.impl.hpp"
-	}
-}
+#include "BlockingQueue.impl.hpp"
+} // namespace internal
+} // namespace ghost
 
-#endif //GHOST_INTERNAL_BLOCKINGQUEUE_HPP
+#endif // GHOST_INTERNAL_BLOCKINGQUEUE_HPP
