@@ -22,7 +22,7 @@
 
 namespace ghost
 {
-static void split(std::vector<std::string>& tokens, const std::string& str, const std::string& del);
+void split(std::vector<std::string>& tokens, const std::string& str, const std::string& del);
 }
 
 #endif // GHOST_SUPPORT_SPLIT_HPP
